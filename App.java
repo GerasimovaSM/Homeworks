@@ -1,193 +1,206 @@
-package покупки;
+package телевизор;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
-// Класс покупки.Product
-class Product {
+// Класс Программа
+class Program {
     private String name;
-    private double cost;
+    private double rating;
+    private int viewersCount;
 
-    public Product(String name, double cost) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Имя не может быть пустым");
-        }
-        if (cost < 0) {
-            throw new IllegalArgumentException("Стоимость продукта не может быть отрицательным числом");
-        }
+    public Program(String name, double rating, int viewersCount) {
         this.name = name;
-        this.cost = cost;
+        this.rating = rating;
+        this.viewersCount = viewersCount;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getCost() {
-        return cost;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getViewersCount() {
+        return viewersCount;
+    }
+
+    public void setViewersCount(int viewersCount) {
+        this.viewersCount = viewersCount;
     }
 
     @Override
     public String toString() {
-        return name + " (₽" + cost + ")";
+        return "Program{" +
+                "name='" + name + '\'' +
+                ", rating=" + rating +
+                ", viewersCount=" + viewersCount +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Double.compare(product.cost, cost) == 0 &&
-                Objects.equals(name, product.name);
+        Program program = (Program) o;
+        return Double.compare(program.rating, rating) == 0 &&
+                viewersCount == program.viewersCount &&
+                Objects.equals(name, program.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, cost);
+        return Objects.hash(name, rating, viewersCount);
     }
 }
 
-// Класс покупки.Person
-class Person {
+// Класс Канал
+class Channel {
     private String name;
-    private double money;
-    private List<Product> products;
+    private int number;
+    private Program program;
 
-    public Person(String name, double money) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Имя не может быть пустым");
-        }
-        if (money < 0) {
-            throw new IllegalArgumentException("Деньги не могут быть отрицательными");
-        }
+    public Channel(String name, int number, Program program) {
         this.name = name;
-        this.money = money;
-        this.products = new ArrayList<>();
+        this.number = number;
+        this.program = program;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getMoney() {
-        return money;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public int getNumber() {
+        return number;
     }
 
-    public void buyProduct(Product product) {
-        if (this.money >= product.getCost()) {
-            this.products.add(product);
-            this.money -= product.getCost();
-            System.out.println(this.name + " купил " + product.getName());
-        } else {
-            System.out.println(this.name + " не может позволить себе " + product.getName());
-        }
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public Program getProgram() {
+        return program;
+    }
+
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     @Override
     public String toString() {
-        if (products.isEmpty()) {
-            return name + ": Ничего не куплено";
-        }
-        return name + " купил: " + products;
+        return "Channel{" +
+                "name='" + name + '\'' +
+                ", number=" + number +
+                ", program=" + program +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Double.compare(person.money, money) == 0 &&
-                Objects.equals(name, person.name) &&
-                Objects.equals(products, person.products);
+        Channel channel = (Channel) o;
+        return number == channel.number &&
+                Objects.equals(name, channel.name) &&
+                Objects.equals(program, channel.program);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, money, products);
+        return Objects.hash(name, number, program);
     }
 }
 
-// Основной класс покупки.App
+// Класс Телевизор
+class Television {
+    private List<Channel> channels;
+    private boolean isOn;
+    private int currentChannelIndex;
+
+    public Television(List<Channel> channels) {
+        this.channels = channels;
+        this.isOn = false;
+        this.currentChannelIndex = 0;
+    }
+
+    public void turnOn() {
+        isOn = true;
+        System.out.println("Телевизор включен. Текущий канал: " + channels.get(currentChannelIndex));
+    }
+
+    public void turnOff() {
+        isOn = false;
+        System.out.println("Телевизор выключен.");
+    }
+
+    public void switchChannel(int channelNumber) {
+        if (!isOn) {
+            System.out.println("Телевизор выключен. Сначала включите его.");
+            return;
+        }
+
+        for (int i = 0; i < channels.size(); i++) {
+            if (channels.get(i).getNumber() == channelNumber) {
+                currentChannelIndex = i;
+                System.out.println("Переключено на канал: " + channels.get(currentChannelIndex));
+                return;
+            }
+        }
+        System.out.println("Канал с номером " + channelNumber + " не найден.");
+    }
+
+    @Override
+    public String toString() {
+        return "Television{" +
+                "channels=" + channels +
+                ", isOn=" + isOn +
+                ", currentChannelIndex=" + currentChannelIndex +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Television that = (Television) o;
+        return isOn == that.isOn &&
+                currentChannelIndex == that.currentChannelIndex &&
+                Objects.equals(channels, that.channels);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(channels, isOn, currentChannelIndex);
+    }
+}
+
 public class App {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        List<Channel> channels = new ArrayList<>();
+        channels.add(new Channel("Первый канал", 1, new Program("Новости", 8.5, 1000000)));
+        channels.add(new Channel("Россия 1", 2, new Program("Фильм", 7.8, 500000)));
+        channels.add(new Channel("ТНТ", 3, new Program("Шоу", 6.9, 300000)));
 
-        // Ввод данных о покупателях
-        System.out.println("Введите данные о покупателях в формате \"покупатель1=бюджет1, покупатель2=бюджет2, ...\":");
-        String personsInput = scanner.nextLine();
-        String[] personPairs = personsInput.split(",");
-        List<Person> persons = new ArrayList<>();
-        for (String pair : personPairs) {
-            String[] parts = pair.trim().split("=");
-            String personName = parts[0].trim();
-            double personMoney = Double.parseDouble(parts[1].trim());
-            persons.add(new Person(personName, personMoney));
-        }
+        Television tv = new Television(channels);
 
-        // Ввод данных о продуктах
-        System.out.println("Введите данные о продуктах в формате \"продукт1=цена1, продукт2=цена2, ...\":");
-        String productsInput = scanner.nextLine();
-        String[] productPairs = productsInput.split(",");
-        List<Product> products = new ArrayList<>();
-        for (String pair : productPairs) {
-            String[] parts = pair.trim().split("=");
-            String productName = parts[0].trim();
-            double productCost = Double.parseDouble(parts[1].trim());
-            products.add(new Product(productName, productCost));
-        }
-
-        // Цикл покупки продуктов для каждого покупателя
-        int currentPersonIndex = 0;
-        boolean continueShopping = true;
-        while (continueShopping) {
-            Person currentPerson = persons.get(currentPersonIndex);
-
-            System.out.println("\nСейчас покупает " + currentPerson.getName() + ". Введите продукты для покупки (введите 'END' для завершения):");
-            while (true) {
-                System.out.print("Введите название продукта: ");
-                String productName = scanner.nextLine();
-                if (productName.equalsIgnoreCase("END")) {
-                    break;
-                }
-
-                Product selectedProduct = null;
-                for (Product product : products) {
-                    if (product.getName().equalsIgnoreCase(productName)) {
-                        selectedProduct = product;
-                        break;
-                    }
-                }
-
-                if (selectedProduct == null) {
-                    System.out.println("Продукт с названием \"" + productName + "\" не найден.");
-                } else {
-                    currentPerson.buyProduct(selectedProduct);
-                }
-            }
-
-            // Переход к следующему покупателю
-            currentPersonIndex = (currentPersonIndex + 1) % persons.size();
-
-            // Запрос на продолжение покупок
-            System.out.print("Продолжить процесс покупок? (yes/no): ");
-            String choice = scanner.nextLine();
-            if (choice.equalsIgnoreCase("no")) {
-                continueShopping = false;
-            }
-        }
-
-        // Вывод результатов
-        System.out.println("\nРезультаты покупок:");
-        for (Person person : persons) {
-            System.out.println(person);
-        }
-
-        scanner.close();
+        tv.turnOn();
+        tv.switchChannel(2);
+        tv.switchChannel(4); // Несуществующий канал
+        tv.turnOff();
     }
 }
